@@ -17,7 +17,7 @@ public class MainManager : MonoBehaviour
     private int m_Points;
     
     private bool m_GameOver = false;
-    public Text HiScore;
+    public Text HiScoreUI;
 
     
     // Start is called before the first frame update
@@ -37,7 +37,11 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
-        HiScore.text = "Top Player : " + GameManager.Instance.username + " Score : 0";
+        if(GameManager.Instance.hiScore > 0)
+        {
+            HiScoreUI.gameObject.SetActive(true);
+            UpdateHiScore();
+        }
     }
 
     private void Update()
@@ -72,7 +76,18 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        if(m_Points > GameManager.Instance.hiScore)
+        {
+            GameManager.Instance.SaveHiScore(GameManager.Instance.currentUser,m_Points);
+            GameManager.Instance.LoadHiScore();
+            UpdateHiScore();
+        }
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+
+    void UpdateHiScore()
+    {
+        HiScoreUI.text = "Top Player : " + GameManager.Instance.topPlayer + " | Score : " + GameManager.Instance.hiScore;
     }
 }

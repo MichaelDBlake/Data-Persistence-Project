@@ -15,7 +15,16 @@ public class MenuUIManager : MonoBehaviour
 
     public void StartButtonClicked()
     {
-        GameManager.Instance.username = getUsername.text;
+        GameManager.Instance.currentUser = getUsername.text;
         SceneManager.LoadScene(1);
+    }
+
+    public void QuitButtonClicked()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.ExitPlaymode();
+#else
+        Application.Quit(); // original code to quit Unity player
+#endif
     }
 }
